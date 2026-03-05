@@ -1,0 +1,5 @@
+# Build directory
+cmake-build-debug-visual-studio/
+build/
+.vscode/
+.idea/
