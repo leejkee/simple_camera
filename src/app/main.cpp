@@ -2,12 +2,11 @@
 // Created by 31305 on 2026/3/5.
 //
 
-#include <frame/frame_queue.hpp>
+#include <frame/frame_lock_free_queue.hpp>
 #include <frame/frame_pool.hpp>
 #include <hikvision/hikvision_camera.hpp>
 #include <memory>
 #include <thread>
-#include <chrono>
 
 int main() {
   const std::unique_ptr<sc::devices::InterfaceCamera> camera =
@@ -23,20 +22,21 @@ int main() {
 
   sc::core::FrameLockFreeQueue queue(4);
 
-  std::atomic<bool> is_running = true;
+  bool is_running = true;
 
   std::thread thread_producer([&]() {
-    while (is_running.load()) {
+    while (is_running) {
       sc::core::Frame* frame = frame_pool.acquire();
       if (!frame) {
         continue;
       }
 
-      frame->width = 1920;
-      frame->height = 1080;
-      frame->stride = 1920*1080*3;
+      if (!camera->grabFrame(*frame)) {
+        frame_pool.release(frame);
+        continue;
+      }
       while (!queue.push(frame)) {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::yield();
       }
     }
   });
@@ -44,19 +44,23 @@ int main() {
 
   std::thread thread_consumer([&]() {
     int processed = 0;
-    while (is_running.load()) {
+    while (is_running) {
       sc::core::Frame* frame = queue.pop();
       if (!frame) {
-        std::this_thread::sleep_for(std::chrono::microseconds(1));
+        std::this_thread::yield();
         continue;
       }
-
-      camera->grabFrame(*frame);
-      std::this_thread::sleep_for(std::chrono::microseconds(50));
+      std::cout << "Frame "
+                << frame->frame_id
+                << " "
+                << frame->width
+                << "x"
+                << frame->height
+                << std::endl;
       processed++;
       frame_pool.release(frame);
       if (processed >= 20) {
-        is_running.store(false);
+        is_running = false;
       }
     }
   });

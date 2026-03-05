@@ -2,7 +2,7 @@
 // Created by 31305 on 2026/3/5.
 //
 #include <frame/frame.hpp>
-#include <frame/frame_queue.hpp>
+#include <frame/frame_lock_free_queue.hpp>
 
 namespace sc {
 namespace core {

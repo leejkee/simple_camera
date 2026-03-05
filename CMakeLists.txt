@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(simple_camera)
 set(CMAKE_CXX_STANDARD 14)
-
+option(SC_BUILD_TESTS "Build sc tests" ON)
 add_subdirectory(src)
+if (SC_BUILD_TESTS)
+    add_subdirectory(tests)
+endif ()
