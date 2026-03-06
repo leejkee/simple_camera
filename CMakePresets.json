@@ -1,0 +1,43 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "windows-base",
+      "displayName": "Windows x64 Configuration",
+      "description": "Target Windows with MSVC",
+      "generator": "Ninja",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "C:/Users/31305/Documents/workspace/opencv/opencv/build",
+        "CMAKE_MAKE_PROGRAM": "C:\\Qt\\Tools\\Ninja\\ninja.exe",
+        "OpenCV_DIR": "C:/Users/31305/Documents/workspace/opencv/opencv/build"
+      },
+      "environment": {
+        "PATH": "C:\\Users\\31305\\Documents\\workspace\\opencv\\opencv\\build\\x64\\vc16\\bin;$penv{PATH}"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-debug",
+      "inherits": "windows-base",
+      "binaryDir": "${sourceDir}/build/windows-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "SC_BUILD_TESTS": "ON"
+      }
+    },
+
+    {
+      "name": "windows-release",
+      "inherits": "windows-base",
+      "binaryDir": "${sourceDir}/build/windows-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ]
+}

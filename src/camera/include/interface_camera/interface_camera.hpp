@@ -16,6 +16,8 @@ public:
   virtual bool stop() = 0;
 
   virtual bool grabFrame(core::Frame& frame) = 0;
+
+  virtual double getFPS() const = 0;
 };
 } // namespace devices
 } // namespace sc
