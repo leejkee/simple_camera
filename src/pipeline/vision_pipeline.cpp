@@ -22,6 +22,8 @@ VisionPipeline::VisionPipeline() {
   m_algo_to_output_queue = std::make_unique<core::FrameLockFreeQueue>(5);
 }
 
+VisionPipeline::~VisionPipeline() = default;
+
 void VisionPipeline::set_camera_source(
     std::shared_ptr<devices::InterfaceCamera> camera) {
   m_camera = std::move(camera);

@@ -23,6 +23,8 @@ class VisionPipeline {
 public:
   VisionPipeline();
 
+  ~VisionPipeline();
+
   void set_camera_source(std::shared_ptr<devices::InterfaceCamera> camera);
 
   void add_algorithm(std::shared_ptr<algo::InterfaceAlgorithm> algorithm);

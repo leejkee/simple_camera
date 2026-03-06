@@ -3,6 +3,9 @@
 //
 #include <chrono>
 #include <frame/frame.hpp>
+#include <frame/frame_lock_free_queue.hpp>
+#include <frame/frame_pool.hpp>
+#include <interface_camera/interface_camera.hpp>
 #include <iostream>
 #include <opencv2/core/mat.hpp>
 #include <opencv2/highgui.hpp>
@@ -12,8 +15,11 @@
 
 namespace sc {
 namespace ui {
+
+OpenCvRenderer::~OpenCvRenderer() = default;
+
 void OpenCvRenderer::run_event_loop(
-    const std::function<bool()>& check_upstream_alive) {
+    const std::function<bool()> &check_upstream_alive) {
   const std::string window_name = "Industrial Vision Standard UI";
   cv::namedWindow(window_name, cv::WINDOW_AUTOSIZE);
 
@@ -42,9 +48,10 @@ void OpenCvRenderer::run_event_loop(
       auto duration =
           std::chrono::duration_cast<std::chrono::milliseconds>(now - last_time)
               .count();
+      processed_frames++;
       if (duration >= 1000) {
         std::cout << "[UI Thread] "
-                  << "Pipeline FPS: " << processed_frames
+                  << "Pipeline FPS: " << processed_frames * 1000 / duration
                   << " | Camera Hardware FPS: " << m_camera->getFPS()
                   << std::endl;
         processed_frames = 0;

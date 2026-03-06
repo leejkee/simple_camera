@@ -1,7 +1,6 @@
 //
 // Created by 31305 on 2026/3/5.
 //
-
 #include <memory>
 #include <opencv_camera/opencv_camera.hpp>
 #include <opencv_renderer/opencv_renderer.hpp>
