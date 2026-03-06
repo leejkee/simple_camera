@@ -12,4 +12,5 @@ target_include_directories(sc_camera PUBLIC
 
 target_link_libraries(sc_camera PUBLIC
         sc_core
+        ${OpenCV_LIBS}
 )

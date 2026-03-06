@@ -11,11 +11,11 @@ class FrameLockFreeQueue {
 public:
   explicit FrameLockFreeQueue(size_t capacity);
 
-  bool push(Frame *frame);
+  bool push(Frame *frame) noexcept;
 
-  Frame *pop();
+  Frame *pop() noexcept;
 
-  size_t size() const;
+  size_t size() const noexcept;
 
 private:
   std::vector<Frame *> m_buffer;

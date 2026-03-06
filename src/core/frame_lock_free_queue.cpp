@@ -10,7 +10,7 @@ FrameLockFreeQueue::FrameLockFreeQueue(const size_t capacity) : m_capacity(capac
   m_buffer.resize(m_capacity);
 }
 
-bool FrameLockFreeQueue::push(Frame *frame) {
+bool FrameLockFreeQueue::push(Frame *frame) noexcept{
   const size_t tail = m_tail.load(std::memory_order_relaxed);
   const size_t next_tail = (tail + 1) % m_capacity;
   if (next_tail == m_head.load(std::memory_order_acquire)) {
@@ -21,7 +21,7 @@ bool FrameLockFreeQueue::push(Frame *frame) {
   return true;
 }
 
-Frame *FrameLockFreeQueue::pop() {
+Frame *FrameLockFreeQueue::pop() noexcept{
   const size_t head = m_head.load(std::memory_order_relaxed);
   if (head == m_tail.load(std::memory_order_acquire)) {
     return nullptr;
@@ -32,7 +32,7 @@ Frame *FrameLockFreeQueue::pop() {
   return frame;
 }
 
-size_t FrameLockFreeQueue::size() const {
+size_t FrameLockFreeQueue::size() const noexcept{
   const size_t head = m_head.load(std::memory_order_acquire);
   const size_t tail = m_tail.load(std::memory_order_acquire);
   return (tail + m_capacity - head) % m_capacity;

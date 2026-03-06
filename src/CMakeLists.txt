@@ -1,3 +1,6 @@
 add_subdirectory(core)
 add_subdirectory(camera)
 add_subdirectory(app)
+add_subdirectory(pipeline)
+add_subdirectory(algorithm)
+add_subdirectory(renderer)

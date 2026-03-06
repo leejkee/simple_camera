@@ -1,5 +1,5 @@
 #pragma once
-#include <interface/interface_camera.hpp>
+#include <interface_camera/interface_camera.hpp>
 #include <iostream>
 
 namespace sc {
